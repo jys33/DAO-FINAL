@@ -32,18 +32,7 @@ $cuenta = $stmt->rowCount();
 print("Eliminadas $cuenta filas.\n");
 ?>
 
-CREATE TABLE USER (
-	user_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
-	lastname VARCHAR(50) NOT NULL,
-	firstname VARCHAR(50) NOT NULL,
-	email VARCHAR(100) NOT NULL,
-	PASSWORD VARCHAR(255) NOT NULL,
-	token CHAR(32) NULL,
-	created DATETIME NOT NULL,
-	modified DATETIME NOT NULL,
-	PRIMARY KEY (user_id),
-	UNIQUE KEY (email)
-) ENGINE = INNODB CHARSET=utf8 COLLATE utf8_general_ci;
+
 
 /**
  * Validamos el email y comprobamos si no existe en la base de datos

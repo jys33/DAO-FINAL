@@ -1,0 +1,159 @@
+/**
+ * Elegir el tipo de dato correcto para una columna
+ * https://dev.mysql.com/doc/refman/8.0/en/choosing-types.html
+ */
+CREATE DATABASE tudb DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+
+USE tudb;
+
+/**
+ * PD: Si un campo es declarado NOT NULL significa que no podes intentar
+ * insertar la palabra NULL y si lo hacemos automaticamente lo setea a '' => vacío
+ * caso contrario figurará en el campo la palabra NULL.
+ */
+
+CREATE TABLE USER (
+	user_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+	lastname VARCHAR(50) NOT NULL,
+	firstname VARCHAR(50) NOT NULL,
+	email VARCHAR(100) NOT NULL,
+	PASSWORD VARCHAR(255) NOT NULL,
+	token CHAR(32) NULL,
+	created DATETIME NOT NULL,
+	modified DATETIME NOT NULL,
+	PRIMARY KEY (user_id),
+	UNIQUE KEY (email)
+) ENGINE = INNODB CHARSET=utf8 COLLATE utf8_general_ci;
+
+Información relacionada
+
+CREATE TABLE pet (
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT, # -128 to 127 normal. 0 to 255 UNSIGNED*.
+	name VARCHAR(30) NOT NULL, # número máximo de caracteres que puede contener = 20
+	owner VARCHAR(30) NOT NULL, # dueño o propietario
+	species VARCHAR(20) NOT NULL,
+	sex CHAR(1), # M o F
+	birth DATE, # por defecto NULL
+	death DATE, # por defecto NULL
+	deleted TINYINT(1) UNSIGNED NOT NULL DEFAULT '0',
+	reg_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	last_update DATETIME ON UPDATE CURRENT_TIMESTAMP, # por defecto NULL
+	PRIMARY KEY(id)
+) ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_general_ci;
+
+-- CREATE TABLE t1 (
+--   ts1 TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,     -- default 0
+--   ts2 TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP -- default NULL
+--   created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+-- );
+-- CREATE TABLE t1 (
+--   dt1 DATETIME ON UPDATE CURRENT_TIMESTAMP,         -- default NULL
+--   dt2 DATETIME NOT NULL ON UPDATE CURRENT_TIMESTAMP -- default 0
+-- );
+
+# la intercalación en utf8_general_ci, es para que los caracteres de acento 
+# y los idiomas como el chino y el ruso se muestren correctamente.
+# No es que vayamos a tener datos con esas características pero es bueno saberlo.
+#                                       VARCHAR           CHAR
+# INSERT INTO pet (name, owner) VALUES ('Loui          ', 'Jys  ');
+# SELECT CONCAT('(', name, ')') FROM pet WHERE name = 'Loui'
+# (Loui          ) 10 espacios vacios
+
+INSERT INTO pet (name, owner, species, sex, birth, death) VALUES
+('Fluffy', 'Harold', 'cat', 'f', '1993-02-04', NULL),
+('Claws', 'Gwen', 'cat', 'm', '1994-03-17', NULL),
+('Buffy', 'Harold', 'dog', 'f', '1989-05-13', NULL),
+('Fang', 'Benny', 'dog', 'm', '1990-08-27', NULL),
+('Bowser', 'Diane', 'dog', 'm', '1979-08-31', '1995-07-29'),
+('Chirpy', 'Gwen', 'bird', 'f', '1998-09-11', NULL),
+('Whistler', 'Gwen', 'bird', NULL, '1997-12-09', NULL),
+('Slim', 'Benny', 'snake', 'm', '1996-04-29', NULL),
+('Snowball', 'Lisa', 'cat', 'm', CURDATE(), NULL);
+/**
+ * Los valores de cadena y fecha se especifican como cadenas entre comillas aquí.
+ * Además, con INSERT, puede insertar NULL directamente para representar un valor faltante.
+ * Supongamos que Diane obtiene un nuevo hámster llamado "Puffball".
+ * Podría agregar un nuevo registro utilizando una instrucción INSERT como esta:
+ */
+INSERT INTO pet (name, owner, species, sex, birth, death) VALUES
+('Puffball','Diane','hamster','f','1999-03-30',NULL),
+('Loui','Harold','dog','m','2017-03-03',NULL);
+
+CREATE TABLE event (
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+	pet_id INT UNSIGNED NOT NULL,
+	date DATE,
+	type VARCHAR(15),
+	remark VARCHAR(255), -- observación, comentarios
+	PRIMARY KEY(id),
+	FOREIGN KEY (pet_id) REFERENCES pet (id)
+) ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_general_ci;
+
+INSERT INTO event (pet_id, date, type, remark) VALUES
+(1, '1995-05-15', 'litter', '4 kittens, 3 female, 1 male'),
+(3, '1993-06-23', 'litter', '5 puppies, 2 female, 3 male'),
+(3, '1994-06-19', 'litter', '3 puppies, 3 female'),
+(6, '1999-03-21', 'vet', 'needed beak straightened'),
+(8, '1997-08-03', 'vet', 'broken rib'),
+(5, '1991-10-12', 'kennel', NULL),	
+(4, '1991-10-12', 'kennel', NULL),	
+(4, '1998-08-28', 'birthday', 'Gave him a new chew toy'),
+(2, '1998-03-17', 'birthday', 'Gave him a new flea collar'),
+(7, '1998-12-09', 'birthday', 'First birthday');
+
+/**
+ * Para determinar cuántos años tiene cada una de sus mascotas, use la función TIMESTAMPDIFF().
+ * Sus argumentos son la unidad en la que desea que se exprese el resultado y las dos fechas para
+ * las cuales se toma la diferencia. La siguiente consulta muestra, para cada mascota,
+ * la fecha de nacimiento, la fecha actual y la edad en años. Se utiliza un alias (age)
+ * para que la etiqueta de la columna de salida final sea más significativa.
+ */
+-- SELECT name, birth, CURDATE() AS today,
+--     TIMESTAMPDIFF(YEAR,birth,CURDATE()) AS age
+--         FROM pet;
+
+/**
+ * La consulta funciona, pero el resultado podría analizarse más fácilmente si las filas se presentaran en algún orden.
+ * Esto se puede hacer agregando una cláusula ORDER BY para ordenar la salida por nombre o id:
+ */
+-- SELECT name, birth, CURDATE() AS today,
+--     TIMESTAMPDIFF(YEAR,birth,CURDATE()) AS age
+--         FROM pet ORDER BY id;
+
+/**
+ * Se puede usar una consulta similar para determinar la edad de muerte de los animales que han muerto.
+ * Usted determina qué animales son estos verificando si el valor de muerte es NULL. Luego, para aquellos
+ * que no tienen valores NULL, calcule la diferencia entre los valores de muerte y nacimiento:
+ */
+-- SELECT name, birth, death,
+--     TIMESTAMPDIFF(YEAR,birth,death) AS age
+--         FROM pet WHERE death IS NOT NULL ORDER BY age;
+
+/**
+ * Para encontrar nombres que comiencen con b:
+ */
+-- SELECT * FROM pet WHERE name LIKE 'b%';
+
+/**
+ * Para encontrar nombres que terminen con fy:
+ */
+-- SELECT * FROM pet WHERE name LIKE '%fy';
+
+/**
+ * Para encontrar nombres que contengan una w:
+ */
+-- SELECT * FROM pet WHERE name LIKE '%w%';
+
+/**
+ * Supongamos que desea averiguar las edades en que cada mascota tenía sus camadas.
+ * Anteriormente vimos cómo calcular edades a partir de dos fechas.
+ * La fecha de la camada de la madre está en la tabla de eventos,
+ * pero para calcular su edad en esa fecha necesita su fecha de nacimiento,
+ * que se almacena en la tabla de mascotas. Esto significa que la consulta requiere ambas tablas:
+ */
+-- SELECT pet.name,
+--     TIMESTAMPDIFF(YEAR,birth,date) AS age,
+--     remark
+--         FROM pet INNER JOIN event
+--             ON pet.id = event.pet_id
+--                WHERE event.type = 'litter'
