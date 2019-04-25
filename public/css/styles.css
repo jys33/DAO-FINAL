@@ -1,0 +1,26 @@
+body {padding-top: 3.5rem;}
+.bg-dark{background-color: #152a49/*rgb(63,81,181)*/!important;}
+@media (min-width: 768px) {
+	.container--signup {max-width: 415px;}
+}
+@media (min-width: 768px) {
+	.container--login {max-width: 380px;}
+}
+.form-sublink {display: inline-block !important; }
+.form-sublink {
+	float: right;
+	color: #6c757d;
+	font-size: 12px;
+	margin-top: .3rem;
+}
+.fs-12 {font-size: 12px;}
+.fs-14 {font-size: 14px;}
+label {font-size: 14px; color: #2d2d2d; margin-bottom: .25rem; font-weight: 500;}
+/*campos requeridos*/
+.required{ color: #dc3545; }
+.form-control:focus {box-shadow: none!important; border: 2px solid #2188ff;}
+.btn.focus, .btn:focus {box-shadow: none!important;}
+.form-control-lg, /*.custom-select,*/ .btn-lg{padding: 10px; font-size: 1rem;}
+.custom-select{font-size: 1rem;}
+.btn-custom {border-radius: 2em; padding: 0.5rem 2rem; font-size: 14px;}
+/*.table td, .table th {padding: .35rem;}*/

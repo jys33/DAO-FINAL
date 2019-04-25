@@ -1,0 +1,149 @@
+PDOStatement::execute
+(PHP 5 >= 5.1.0, PHP 7, PECL pdo >= 0.1.0)
+
+PDOStatement::execute — Ejecuta una sentencia preparada
+Valores devueltos
+Devuelve TRUE en caso de éxito o FALSE en caso de error.
+
+PDOStatement::rowCount() devuelve el número de filas afectadas por la última sentencia DELETE, INSERT, o UPDATE ejecutada por el correspondiente objeto PDOStatement.
+
+Si la última sentencia SQL ejecutada por el objeto PDOStatement asociado fue una sentencia SELECT, algunas bases de datos podrían devolver el número de filas devuelto por dicha sentencia. Sin embargo, este comportamiento no está garantizado para todas las bases de datos y no debería confiarse en él para aplicaciones portables.
+
+Valores devueltos
+Devuelve el número de filas.
+
+PDOStatement::rowCount() devuelve el número de filas afectadas por una sentencia DELETE, INSERT, o UPDATE.
+
+if ($result) {
+	if ($stmt->rowCount() > 0) {
+	    $data = $stmt->fetch(PDO::FETCH_ASSOC);
+	    return !empty($data) ? $data : false;
+	}
+}
+
+<?php
+/* Borrar todas las filas de la tabla FRUIT */
+$stmt = $gbd->prepare('DELETE FROM fruit');
+$stmt->execute();
+
+/* Devolver el número de filas que fueron eliminadas */
+print("Devolver el número de filas que fueron eliminadas:\n");
+$cuenta = $stmt->rowCount();
+print("Eliminadas $cuenta filas.\n");
+?>
+
+CREATE TABLE USER (
+	user_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+	lastname VARCHAR(50) NOT NULL,
+	firstname VARCHAR(50) NOT NULL,
+	email VARCHAR(100) NOT NULL,
+	PASSWORD VARCHAR(255) NOT NULL,
+	token CHAR(32) NULL,
+	created DATETIME NOT NULL,
+	modified DATETIME NOT NULL,
+	PRIMARY KEY (user_id),
+	UNIQUE KEY (email)
+) ENGINE = INNODB CHARSET=utf8 COLLATE utf8_general_ci;
+
+/**
+ * Validamos el email y comprobamos si no existe en la base de datos
+ */
+if (!empty($trimmed['email'])) {
+	$data['email'] = filter_var($trimmed['email'], FILTER_SANITIZE_EMAIL);
+	if ( !filter_var($data['email'], FILTER_VALIDATE_EMAIL )) {
+		$data['email_err'] = 'Este correo electrónico no parece estar formado correctamente.';
+	} else {
+		// consultamos la tabla user por el email
+		if ($userData->emailExists($data['email'])) {
+			$data['email_err'] = 'Ya hay una cuenta con ese correo electrónico. Si es tuyo, inicia sesión ahora';
+		}
+	}
+} else {
+	$data['email_err'] = 'Por favor dinos tu dirección de correo electrónico.';
+}
+
+/**
+ * Validamos el firstname
+ */
+if (!empty($trimmed['firstname'])) {
+	$data['firstname'] = $trimmed['firstname'];
+	if( !preg_match("/^[a-zA-ZáéíóúÁÉÍÓÚÑñÜü ]+$/", $data['firstname']) ){
+	    $data['firstname_err'] = 'Sólo se permiten letras y espacios en blanco.';
+	}
+} else {
+	$data['firstname_err'] = 'Por favor dinos tu nombre.';
+}
+
+/**
+ * Validamos el lastname
+ */
+if (!empty($trimmed['lastname'])) {
+	$data['lastname'] = $trimmed['lastname'];
+	if( !preg_match("/^[a-zA-ZáéíóúÁÉÍÓÚÑñÜü ]+$/", $data['lastname']) ){
+	    $data['lastname_err'] = 'Sólo se permiten letras y espacios en blanco.';
+	}
+} else {
+	$data['lastname_err'] = 'Por favor dinos tu apellido.';
+}
+
+/**
+ * Validamos la password
+ */
+if (!empty($trimmed['password'])) {
+	if ( validatePasswordStrength( $trimmed['password'] ) ) {
+		$data['password'] = $trimmed['password'];
+	} else {
+		$data['password_err'] = 'La contraseña debe tener 8 caracteres de longitud, tener al menos una letra mayúscula, un número y un carácter especial.';
+	}
+} else {
+	$data['password_err'] = 'Crea una contraseña.';
+}
+
+/**/
+^        Start of line
+$        End of line
+n?        Zero or only one single occurrence of character 'n'
+n*        Zero or more occurrences of character 'n'
+n+        At least one or more occurrences of character 'n'
+n{2}        Exactly two occurrences of 'n'
+n{2,}        At least 2 or more occurrences of 'n'
+n{2,4}        From 2 to 4 occurrences of 'n'
+.        Any single character
+()        Parenthesis to group expressions
+(.*)        Zero or more occurrences of any single character, ie, anything!
+(n|a)        Either 'n' or 'a'
+[1-6]        Any single digit in the range between 1 and 6
+[c-h]        Any single lower case letter in the range between c and h
+[D-M]        Any single upper case letter in the range between D and M
+[^a-z]        Any single character EXCEPT any lower case letter between a and z.
+
+        Pitfall: the ^ symbol only acts as an EXCEPT rule if it is the 
+        very first character inside a range, and it denies the 
+        entire range including the ^ symbol itself if it appears again 
+        later in the range. Also remember that if it is the first 
+        character in the entire expression, it means "start of line". 
+        In any other place, it is always treated as a regular ^ symbol.
+        In other words, you cannot deny a word with ^undesired_word 
+        or a group with ^(undesired_phrase).
+        Read more detailed regex documentation to find out what is 
+        necessary to achieve this.
+
+[_4^a-zA-Z]    Any single character which can be the underscore or the 
+        number 4 or the ^ symbol or any letter, lower or upper case
+
+?, +, * and the {} count parameters can be appended not only to a single character, but also to a group() or a range[].
+
+therefore,
+^.{2}[a-z]{1,2}_?[0-9]*([1-6]|[a-f])[^1-9]{2}a+$
+would mean:
+
+^.{2}         = A line beginning with any two characters, 
+[a-z]{1,2}     = followed by either 1 or 2 lower case letters, 
+_?         = followed by an optional underscore, 
+[0-9]*         = followed by zero or more digits, 
+([1-6]|[a-f])     = followed by either a digit between 1 and 6 OR a 
+        lower case letter between a and f, 
+[^1-9]{2}     = followed by any two characters except digits 
+        between 1 and 9 (0 is possible), 
+a+$         = followed by at least one or more 
+        occurrences of 'a' at the end of a line.
