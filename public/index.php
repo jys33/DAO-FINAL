@@ -1,9 +1,16 @@
 <?php
-require 'UserDao.php';
-$userDao = new UserDao();
+require_once '../src/App/Config.php';
+\App\Config::setDirectory('../config');
 
-$users = $userDao->getAll();
+$config = \App\Config::get('autoload');
+require_once $config['class_path'] . '/App/Autoloader.php';
 
-require '../views/inc/header.phtml';
-require '../views/users/list.phtml';
-require '../views/inc/footer.phtml';
+if (!isset($_SERVER['PATH_INFO']) || empty($_SERVER['PATH_INFO']) || $_SERVER['PATH_INFO'] == '/') {
+    $route = 'list';
+} else {
+    $route = $_SERVER['PATH_INFO'];
+}
+
+$router = new \App\Router();
+$router->start($route);
+?>

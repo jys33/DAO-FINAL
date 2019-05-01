@@ -18,8 +18,8 @@
                 <td><?= $user['created'] ?></td>
                 <td><?= $user['modified'] ?></td>
                 <td class="text-center">
-                    <a href="/edit.php?id=<?= $user['user_id'] ?>" class="btn btn-warning btn-sm" title="Edit">Edit</a>&nbsp;
-                    <a href="/delete.php?id=<?= $user['user_id'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete to ' + '<?= $user['lastname'] . ' ' . $user['firstname'] ?>?')" title="Delete">Delete</a>
+                    <a href="/edit?id=<?= $user['user_id'] ?>" class="btn btn-warning btn-sm" title="Edit">Edit</a>&nbsp;
+                    <a href="/delete?id=<?= $user['user_id'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete to ' + '<?= $user['lastname'] . ' ' . $user['firstname'] ?>?')" title="Delete">Delete</a>
                 </td>
             </tr>
         <?php endforeach ?>

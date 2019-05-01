@@ -1,5 +1,5 @@
-<?php
-require 'BaseDao.php';
+<?php namespace App;
+use \PDO;
 /**
  * 
  */
@@ -85,13 +85,24 @@ class UserDao extends BaseDao
 		return false;
 	}
 
+	public function userEmailTaken($email) {
+		$stmt = $this->db->prepare('SELECT user_id FROM user WHERE email = :email LIMIT 1');
+		$stmt->bindParam(':email', $email, PDO::PARAM_STR);
+		$result = $stmt->execute();
+		if ($result) {
+			$data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+			return (count($data) == 1);
+		}
+		return false;
+	}
+	
 	public function getAll() {
 		$stmt = $this->db->prepare('SELECT * FROM user');
 		$result = $stmt->execute();
 		if ($result) {
 			return $stmt->fetchAll(PDO::FETCH_ASSOC);
 		}
-
 		return false;
 	}
+
 }

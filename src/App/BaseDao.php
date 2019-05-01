@@ -1,5 +1,5 @@
-<?php
-date_default_timezone_set('America/Argentina/Buenos_Aires');
+<?php namespace App;
+use \PDO;
 /**
  * 
  */
@@ -31,14 +31,15 @@ abstract class BaseDao
 	 * [getDb Instancia y retorna un objecto de la clase PDO que contiene la conexión a la DB]
 	 * @return [PDO] [database connection]
 	 */
-	protected final function getDb(){
+	protected final function getDb() {
 
 		// tratar de conectarse a la base de datos
 		if ( !isset( self::$conn ) ) {
 
 			try {
-				self::$conn = new PDO('mysql:host=localhost;dbname=dao', 'root', NULL, self::$options);
-			} catch (Exception $e) {
+				$config = \App\Config::get('database');
+				self::$conn = new PDO("mysql:host=" .$config['hostname']. ";dbname=" .$config['dbname'], $config['username'], $config['password'], self::$options);
+			} catch (PDOException $e) {
 				// trigger (big, orange) error
 				trigger_error($e->getMessage(), E_USER_ERROR);
 				exit;

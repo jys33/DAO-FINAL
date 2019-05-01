@@ -1,18 +1,20 @@
 <section class="">
 	<div class="row">
 		<div class="container container--signup">
-			<h1 class="mb-1 text-center" style="font-size: 34px">Actualizar</h1>
-			<p class="fs-14 text-muted text-center mb-5">Ingresa tus datos para modificar tu cuenta de acceso.</p>
-			<form action="/edit.php" method="POST">
+			<div class="text-center">
+			    <h1 class="mb-1 font-weight-normal" style="font-size: 34px">Actualizar</h1>
+			    <p class="fs-14 text-muted mb-5">Ingresa tus datos para modificar tu cuenta de acceso.</p>
+			</div>
+			<form action="/edit" method="POST">
 				<div class="form-row">
 					<div class="col-md-6 mb-3">
 						<label for="firstname">Nombre <span class="required">*</span></label>
-						<input type="text" name="firstname" id="firstname" class="form-control form-control-lg" value="<?= $user['firstname'] ?>" size="20" autofocus>
+						<input type="text" name="firstname" id="firstname" class="form-control" value="<?= $user['firstname'] ?>" size="20" autofocus>
 						<div class="invalid-feedback"></div>
 					</div>
 					<div class="col-md-6 mb-3">
 						<label for="lastname">Apellido <span class="required">*</span></label>
-						<input type="text" name="lastname" id="lastname" class="form-control form-control-lg" value="<?= $user['lastname'] ?>" size="20">
+						<input type="text" name="lastname" id="lastname" class="form-control" value="<?= $user['lastname'] ?>" size="20">
 						<div class="invalid-feedback"></div>
 					</div>
 				</div>
@@ -20,7 +22,7 @@
 					<span class="text-danger">Dejar en blanco si no quiere cambiar la contraseña.</span>
 					<label for="password" class="d-block">Nueva contraseña <span class="required">*</span></label>
 					<div id="passwordHelpInline" class="text-muted mb-1 fs-14">Las contraseñas deben tener por lo menos 8 caracteres y tener una combinación de letras, números y otros caracteres.</div>
-					<input type="password" name="password" id="password" class="form-control form-control-lg" aria-describedby="passwordHelpInline" size="20">
+					<input type="password" name="password" id="password" class="form-control" aria-describedby="passwordHelpInline" size="20">
 					<div class="invalid-feedback"></div>
 				</div>
 				<div class="row">

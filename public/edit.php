@@ -1,5 +1,4 @@
 <?php
-require 'UserDao.php';
 
 if (isset($_POST['id']) && !empty($_POST['id'])) {
     $data = [
@@ -11,7 +10,7 @@ if (isset($_POST['id']) && !empty($_POST['id'])) {
         $data['password'] = password_hash($_POST['password'] . 'Nh-Tw3M-cRW)', PASSWORD_DEFAULT);
     }
 
-    $userDao = new UserDao();
+    $userDao = new \App\UserDao();
     if ($userDao->update($_POST['id'], $data)) {
         header("Location: /index.php");
         exit;
@@ -26,7 +25,7 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
     exit;
 }
 
-$userDao = new UserDao();
+$userDao = new \App\UserDao();
 $user = $userDao->findById($_GET['id']);
 
 if ($user === false) {
@@ -34,6 +33,5 @@ if ($user === false) {
     exit;
 }
 
-require '../views/inc/header.phtml';
-require '../views/users/edit.phtml';
-require '../views/inc/footer.phtml';
+$view = new \App\View();
+$view->render("../views/users/edit", ['title' => 'Edit user', 'user' => $user]);

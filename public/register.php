@@ -1,8 +1,7 @@
 <?php
-require 'UserDao.php';
 
 if (isset($_POST) && sizeof($_POST) > 0) {
-    $userDao = new UserDao();
+    $userDao = new \App\UserDao();
     if(!array_key_exists('created',$_POST)) {
     	$_POST['created'] = date("Y-m-d H:i:s");
     }
@@ -15,6 +14,6 @@ if (isset($_POST) && sizeof($_POST) > 0) {
     	exit;
     }
 }
-require '../views/inc/header.phtml';
-require '../views/users/add.phtml';
-require '../views/inc/footer.phtml';
+
+$view = new \App\View();
+$view->render("../views/users/signup-form", ['title' => 'Sign up']);
