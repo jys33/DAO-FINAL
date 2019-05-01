@@ -2,7 +2,6 @@
 
 class View {
     public function render($view, $values = []) {
-
         // if view exists, render it
         if (file_exists($view . '.phtml')) {
             // extract variables into local scope

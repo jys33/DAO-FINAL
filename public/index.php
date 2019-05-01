@@ -6,11 +6,10 @@ $config = \App\Config::get('autoload');
 require_once $config['class_path'] . '/App/Autoloader.php';
 
 if (!isset($_SERVER['PATH_INFO']) || empty($_SERVER['PATH_INFO']) || $_SERVER['PATH_INFO'] == '/') {
-    $route = 'list';
+    $route = 'login';
 } else {
     $route = $_SERVER['PATH_INFO'];
 }
 
 $router = new \App\Router();
 $router->start($route);
-?>
