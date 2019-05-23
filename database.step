@@ -9,8 +9,8 @@ USE tudb;
 /**
  * PD: Si un campo es declarado NOT NULL significa que no podes intentar
  * insertar la palabra NULL y si lo hacemos automaticamente lo setea a '' => vacío
- * caso contrario figurará en el campo la palabra NULL.Por otro lado si el campo
- * es declarado NOT NULL y no insertamos nada en el campo tendremos una advertencia de mysql
+ * caso contrario figurará en el campo la palabra NULL. Por otro lado si el campo
+ * es declarado NOT NULL y no insertamos nada en el campo tendremos también una advertencia de mysql
  */
 
 CREATE TABLE USER (
