@@ -11,17 +11,17 @@
             </ul>
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item active mr-3"><a class="nav-link" href="/login">Sign in</a></li>
-                <form class="form-inline my-2 my-lg-0">
-                    <a href="/register" class="btn btn-primary my-2 my-sm-0">Sign up</a>
-                </form>
-                <!-- <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Settings </a>
-                    <div class="dropdown-menu dropdown-menu-right fs-14" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                    </div>
-                </li> -->
             </ul>
+            <form class="form-inline my-2 my-lg-0">
+                <a href="/register" class="btn btn-primary my-2 my-sm-0">Sign up</a>
+            </form>
         </div>
     </div>
 </nav>
+<?php if ($flashes): ?>
+<header>
+    <div class="alert alert-info text-center" role="alert">
+        <?php foreach ($flashes as $flash) echo $flash; ?>
+    </div>
+</header>
+<?php endif ?>

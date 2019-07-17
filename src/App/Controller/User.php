@@ -1,5 +1,7 @@
 <?php namespace App\Controller;
 
+use App\Flash;
+
 class User {
 
     protected $userDao;
@@ -54,6 +56,7 @@ class User {
             }
             $_POST['password'] = password_hash($_POST['password'] . 'Nh-Tw3M-cRW)', PASSWORD_DEFAULT);
             if ($this->userDao->add($_POST)) {
+                Flash::addFlash('El registro se realizó correctamente.');
                 header("Location: /");
                 exit;
             }

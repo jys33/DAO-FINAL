@@ -5,4 +5,3 @@ return [
     "hostname" => "localhost",
     "dbname" => "dao",
 ];
-?>

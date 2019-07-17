@@ -7,7 +7,7 @@ class UserDao extends BaseDao
 {
 	private $db = null;
 	
-	function __construct()
+	public function __construct()
 	{
 		$this->db = $this->getDb();
 	}
@@ -104,5 +104,4 @@ class UserDao extends BaseDao
 		}
 		return false;
 	}
-
 }

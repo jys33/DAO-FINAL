@@ -24,3 +24,5 @@ label {font-size: 14px; color: #2d2d2d; margin-bottom: .25rem; font-weight: 500;
 .btn-lg {
     font-size: 1rem;
 }
+/*table*/
+table {font-size: .875rem;}/*14px*/
