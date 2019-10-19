@@ -78,10 +78,22 @@ class UserDao extends BaseDao
 		$stmt->bindParam(':user_id', $id, PDO::PARAM_INT);
 		$result = $stmt->execute();
 		if ($result) {
-			$data = $stmt->fetch(PDO::FETCH_ASSOC);
-			return (!empty($data)) ? $data : false;
+			$row = $stmt->fetch(PDO::FETCH_ASSOC);
+			// return (!empty($row)) ? $row : false;
+			return (!$row) ? false : $row;
 		}
 
+		return false;
+	}
+	
+	public function getAll() {
+		$stmt = $this->db->prepare('SELECT * FROM user');
+		$result = $stmt->execute();
+		if ($result) {
+			$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+			// return (!empty($rows)) ? $rows : false;
+			return (!$rows) ? false : $rows;
+		}
 		return false;
 	}
 
@@ -96,12 +108,4 @@ class UserDao extends BaseDao
 		return false;
 	}
 	
-	public function getAll() {
-		$stmt = $this->db->prepare('SELECT * FROM user');
-		$result = $stmt->execute();
-		if ($result) {
-			return $stmt->fetchAll(PDO::FETCH_ASSOC);
-		}
-		return false;
-	}
 }
